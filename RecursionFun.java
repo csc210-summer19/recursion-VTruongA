@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Complete the seven methods methods in this file using recursion, no loops. 
  * Also complete these three methods inside LinkedList<E>:
@@ -13,14 +15,18 @@
  * 
  * We will not be using code coverage for points.
  *
- * @author Rick Mercer and Your Name
+ * @author Rick Mercer and Vincent Truong
  */
 public class RecursionFun {
 
   // Complete recursive method combinations that returns from n choose k.
   // This method is described in 17_SimpleRecursion.pptx.
   public int combinations(int n, int k) {
-    return Integer.MIN_VALUE;
+    if(k == 1)
+    	return n;
+    if (n == k)
+    	return 1;
+    return combinations(n-1, k-1) + combinations(n-1, k);
   }
 
  
@@ -34,11 +40,21 @@ public class RecursionFun {
   //
   // Precondition: n >= 0
   public String intWithCommas(int n) {
-    // TODO: Implement this method using recursion. Do not use a loop
-    return "Under construction";
+    return intWithCommasHelper(String.valueOf(n),1);
   }
 
-  // Write recursive method reverseArray that reverses the array elements in a
+
+private String intWithCommasHelper(String n,int i) {
+	if (n.length() == 0)
+		return "";
+	else if (i == 4)
+		return intWithCommasHelper(n.substring(0,n.length()),1) + ",";
+	else
+		return intWithCommasHelper(n.substring(0,n.length()-1),i+1) + n.charAt(n.length()-1);
+}
+
+
+// Write recursive method reverseArray that reverses the array elements in a
   // filled array of ints. Use recursion; do not use a loop. The following
   // assertions must pass:
   //
@@ -58,8 +74,14 @@ public class RecursionFun {
   }
 
   private void reverseArray(int[] x, int index, int len) {
-    // TODO: Complete this method with a recursive algorithm. 
-    // Do NOT use a loop.
+    if (index >= (len/2))
+    	;
+    else {
+    	int temp = x[len-index-1];
+    	x[len-index-1] = x[index];
+    	x[index] = temp;
+    	reverseArray(x, index + 1, len);
+    }
   }
 
   // Write recursive method arrayRange that returns the maximum
@@ -67,19 +89,43 @@ public class RecursionFun {
   // integers, Use recursion; do not use a loop. 
   // Precondition: a.length > 0
   public int arrayRange(int[] a) {
-    return Integer.MIN_VALUE;
+    return arrayRangeHelper(a,a[0],a[0]);
   }
 
-  // Return true if nums has all int elements in ascending order.
+  private int arrayRangeHelper(int[] a, int max, int min) {
+	if (a.length == 0)
+		return max - min;
+	else {
+		if (a[0]>max)
+			max = a[0];
+		if (a[0]<min)
+			min = a[0];
+		return arrayRangeHelper(Arrays.copyOfRange(a,1, a.length),max,min);
+	}		
+}
+
+
+// Return true if nums has all int elements in ascending order.
   // If not isSorted, return false.
   public boolean isSorted(int[] nums) {
-    // Need to send down 0 to keep track of the index
-    return ! true;
+    if (nums.length <= 1)
+    	return true;
+    else {
+    	if (nums[0]>nums[1])
+    		return false;
+    	return isSorted(Arrays.copyOfRange(nums, 1, nums.length));
+    }
   }
 
   // Complete method found to return true if search is found in strs.
   // If not found, return false. Use equals, not ==.
   public boolean found(String search, String[] strs) {
-     return ! true;
+	 if (strs.length == 0)
+		 return false;
+     else {
+         if (strs[0].equals(search))
+        	 return true;
+    	 return found(search, Arrays.copyOfRange(strs, 1, strs.length));
+     }
   }
 }
